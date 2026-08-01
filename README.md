@@ -2,6 +2,19 @@
 
 React + Vite + Sass 的個人閱讀收藏網站。
 
+## 開發需求
+
+- Node.js 24.x
+
+使用 nvm-windows：
+
+```powershell
+nvm install 24.18.1
+nvm use 24.18.1
+```
+
+`.nvmrc` 供支援該檔案的版本管理工具使用；nvm-windows 請執行上方指令。
+
 ## 開發
 
 ```bash

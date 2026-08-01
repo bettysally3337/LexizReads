@@ -1,4 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+import KnowledgeTools from './components/KnowledgeTools.jsx';
 
 const ALL_TAG = 'all';
 const ALL_CATEGORY = 'all';
@@ -55,7 +57,7 @@ const sectionTabs = [
   { id: 'books', label: { zh: '個人愛書', en: 'Favorite Books' } },
   { id: 'series', label: { zh: '推薦影集', en: 'Series Picks' } },
   { id: 'movies', label: { zh: '推薦電影', en: 'Movie Picks' } },
-  { id: 'notes', label: { zh: '學習筆記', en: 'Learning Notes' } },
+  { id: 'tools', label: { zh: '知識工具庫', en: 'Knowledge Tools' } },
 ];
 
 const categoryTabs = {
@@ -301,86 +303,6 @@ const collectionItems = [
   },
 ];
 
-const learningNotes = [
-  {
-    id: 'expand-story',
-    title: { zh: '放大故事的技巧', en: 'Story Expansion Techniques' },
-    summary: {
-      zh: '把產品、生活事件或人生轉折拆成可觀察的格子，找出亮點、意外、衝突與適合場景，讓故事更容易被記住。',
-      en: 'Break products, life events, and turning points into observable grids to find highlights, surprises, conflict, and use cases.',
-    },
-    tables: [
-      {
-        id: 'story-product-fit',
-        title: { zh: '表 3A：把產品特色轉成故事', en: 'Table 3A: Turn Features into Story' },
-        columns: ['我想到的故事是', '亮點特色是', '普遍特色是', '我賣的產品是'],
-        rows: [
-          ['去男友家做一道菜的上班族女性故事', '為客人的煩惱找到最適合的書', '種類繁多的書', '書店裡的書'],
-          ['', '', '', ''],
-        ],
-        example:
-          '如果產品是「書店裡的書」，不要只說種類很多；把它放進「店長幫客人找到最適合的書」這種具體場景。',
-      },
-      {
-        id: 'competitive-position',
-        title: { zh: '表 4：找出有與細', en: 'Table 4: What You Have and What You Do in Detail' },
-        columns: ['我的角色是', '人無我有的是', '人有我細的是'],
-        rows: [
-          ['澎湖旅遊業者', '在地路線與即時天候判斷', '花火節、浮潛、社區導覽的細節安排'],
-          ['', '', ''],
-        ],
-        example: '先列出大家沒有但你有的資源，再把大家都有的服務寫到更細，故事就會有差異。',
-      },
-      {
-        id: 'daily-surprise',
-        title: { zh: '表 5A / 5B：生活處處有驚喜', en: 'Table 5A / 5B: Surprise in Daily Life' },
-        columns: ['尋找日常故事', '意料之內', '意料之外'],
-        rows: [
-          ['自己', '吃一個便當十五至三十分鐘', '吃一個便當九十秒'],
-          ['自己', '早餐吃一個御飯糰', '早餐吃了十個以上的品項'],
-        ],
-        example: '日常事件只要出現「跟預期不一樣」的地方，就可能成為故事切入點。',
-      },
-      {
-        id: 'key-moments',
-        title: { zh: '表 6A：每個關鍵時刻的故事不只一個', en: 'Table 6A: Key Moments Create Many Stories' },
-        columns: ['角色', '低潮時刻', '堅持時刻', '逆境時刻'],
-        rows: [
-          [
-            '每天在不同單位授課的講師',
-            '講師生涯剛開始，沒人邀約的時刻',
-            '不分寒暑，不論平日假日，每天晨讀六十分鐘的時刻',
-            '第一次進行企業授課，因為太緊張而全身晃動的時刻',
-          ],
-        ],
-        example: '同一個角色不要只寫成功，可以從低潮、堅持、逆境拆出三種故事。',
-      },
-      {
-        id: 'quick-story-note',
-        title: { zh: '表 7：隨手記錄，就能信手拈來', en: 'Table 7: Capture Stories as They Happen' },
-        columns: ['故事摘要', '故事重點'],
-        rows: [
-          ['會議中聽到一個讓大家突然安靜的問題', '真正重要的問題，常常比答案更能推動討論'],
-          ['', ''],
-        ],
-        example: '先記摘要，再記它能提醒你的重點；以後寫文章或簡報就能快速取用。',
-      },
-      {
-        id: 'life-turning-points',
-        title: { zh: '表 10A：有系統地整理生命故事', en: 'Table 10A: Organize Life Stories by Stage' },
-        columns: ['欄位', '國小階段', '國中階段', '高中階段', '大學階段', '社會新鮮人階段', '結婚階段', '生孩子階段'],
-        rows: [
-          ['轉折點', '小三轉學', '手被踢骨折', '書包不見', '女生的拒絕', '襯衫鈕扣', '離婚證書', '打翻飲料'],
-          ['故事名稱', '二百分的社會科', '打掃時間', '高三的意外', '第一次聯誼', '第一次讀書會', '錄音婚姻', '一本書的肚量'],
-          ['故事放大', '讚美的力量', '交友的真諦', '堅持的力量', '找到優勢', '練習的重要', '溝通的重要', '情緒管理'],
-          ['適合場合', '', '', '', '', '', '', ''],
-        ],
-        example: '先照人生階段列出轉折點，再為每個轉折補上故事名稱、放大角度與適合使用的場合。',
-      },
-    ],
-  },
-];
-
 function localize(value, language) {
   if (typeof value === 'string') {
     return value;
@@ -389,20 +311,13 @@ function localize(value, language) {
   return value[language] ?? value.zh;
 }
 
-function toMarkdownTable(table) {
-  const header = `| ${table.columns.join(' | ')} |`;
-  const divider = `| ${table.columns.map(() => '---').join(' | ')} |`;
-  const rows = table.rows.map((row) => `| ${row.join(' | ')} |`);
-
-  return [table.title.zh, '', header, divider, ...rows, '', `例子：${table.example}`].join('\n');
-}
-
 function App() {
   const [language, setLanguage] = useState('zh');
-  const [activeSection, setActiveSection] = useState('books');
+  const [activeSection, setActiveSection] = useState(() =>
+    window.location.hash.startsWith('#tools') ? 'tools' : 'books',
+  );
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORY);
   const [activeTag, setActiveTag] = useState(ALL_TAG);
-  const [copiedTableId, setCopiedTableId] = useState('');
 
   const copy = ui[language];
   const activeSectionLabel = localize(
@@ -411,7 +326,18 @@ function App() {
   );
   const activeCategories = categoryTabs[activeSection] ?? [];
   const shouldShowCategories = activeCategories.length > 1;
-  const isCollectionSection = activeSection !== 'notes';
+  const isCollectionSection = activeSection !== 'tools';
+
+  useEffect(() => {
+    function openToolsForToolHash() {
+      if (window.location.hash.startsWith('#tools')) {
+        setActiveSection('tools');
+      }
+    }
+
+    window.addEventListener('hashchange', openToolsForToolHash);
+    return () => window.removeEventListener('hashchange', openToolsForToolHash);
+  }, []);
 
   const sectionItems = useMemo(() => {
     return collectionItems.filter((item) => item.section === activeSection);
@@ -453,17 +379,15 @@ function App() {
     setActiveSection(sectionId);
     setActiveCategory(ALL_CATEGORY);
     setActiveTag(ALL_TAG);
-    setCopiedTableId('');
+
+    if (sectionId !== 'tools' && window.location.hash.startsWith('#tools')) {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    }
   }
 
   function changeCategory(categoryId) {
     setActiveCategory(categoryId);
     setActiveTag(ALL_TAG);
-  }
-
-  async function copyLearningTable(table) {
-    await navigator.clipboard.writeText(toMarkdownTable(table));
-    setCopiedTableId(table.id);
   }
 
   return (
@@ -591,57 +515,7 @@ function App() {
           </section>
         </section>
       ) : (
-        <section className="learning-section" aria-label={activeSectionLabel}>
-          {learningNotes.map((note) => (
-            <article className="learning-note" key={note.id}>
-              <div className="section-heading">
-                <div>
-                  <p className="eyebrow">{activeSectionLabel}</p>
-                  <h2>{localize(note.title, language)}</h2>
-                </div>
-              </div>
-              <p className="learning-summary">{localize(note.summary, language)}</p>
-
-              <div className="learning-table-grid">
-                {note.tables.map((table) => (
-                  <section className="learning-table-panel" key={table.id}>
-                    <div className="learning-table-header">
-                      <h3>{localize(table.title, language)}</h3>
-                      <button type="button" onClick={() => copyLearningTable(table)}>
-                        {copiedTableId === table.id ? copy.copied : copy.copyTable}
-                      </button>
-                    </div>
-
-                    <div className="table-scroll">
-                      <table>
-                        <thead>
-                          <tr>
-                            {table.columns.map((column) => (
-                              <th key={column}>{column}</th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {table.rows.map((row, rowIndex) => (
-                            <tr key={`${table.id}-${rowIndex}`}>
-                              {row.map((cell, cellIndex) => (
-                                <td key={`${table.id}-${rowIndex}-${cellIndex}`}>{cell}</td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <p className="learning-example">
-                      <strong>{copy.example}:</strong> {table.example}
-                    </p>
-                  </section>
-                ))}
-              </div>
-            </article>
-          ))}
-        </section>
+        <KnowledgeTools language={language} />
       )}
     </main>
   );
